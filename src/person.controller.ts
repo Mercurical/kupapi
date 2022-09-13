@@ -1,5 +1,6 @@
-import { Controller, Get, HttpCode } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { PersonDto } from './domain/dto/person.dto';
 import { Person } from './domain/person';
 
 @Controller('person')
@@ -24,5 +25,11 @@ export class PersonController {
         }
       }
     ];
+  }
+
+  @Post()
+  @HttpCode(201)
+  createPerson(@Body() personDto: PersonDto): PersonDto {
+    return personDto;
   }
 }
