@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { PersonDto } from './domain/dto/person.dto';
 import { Person } from './domain/person';
 import { Person as PersonModel, PersonDocument } from './schema/person.schema';
@@ -11,22 +11,14 @@ export class PersonController {
 
   @Get()
   @HttpCode(200)
-  getList(): Person[] {
-    return [
-      {
-        firstName: 'Antoni',
-        lastName: 'Macierewicz',
-        age: 70,
-        dateJoined: new Date('1990-02-04'),
-        isTrustedByKarakan: true,
-        address: {
-          street: 'Sezamkowa',
-          houseNumber: '69',
-          postalCode: '00-999',
-          city: 'Warszawa'
-        }
-      }
-    ];
+  getList(): Promise<PersonModel[]>  {
+    return this.personModel.find().exec();
+  }
+
+  @Get(":id")
+  @HttpCode(200)
+  getById(@Param() params: {id: string}): Promise<PersonModel>  {
+    return this.personModel.findById(params.id).exec();
   }
 
   @Post()
@@ -36,4 +28,7 @@ export class PersonController {
 
     return createdPerson.save();
   }
+
+  
+
 }
