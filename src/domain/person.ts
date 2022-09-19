@@ -4,7 +4,7 @@ interface Person {
     age: number;
     dateJoined?: Date;
     isTrustedByKarakan: boolean;
-    address: Address;
+    address?: Address;
 }
 
 interface Address {
