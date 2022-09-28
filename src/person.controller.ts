@@ -1,8 +1,10 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Patch } from '@nestjs/common';
 import { PersonDto } from './domain/dto/person.dto';
 import { Person as PersonModel, PersonDocument } from './schema/person.schema';
+import { PersonUpdateDto } from './domain/dto/personUpdate.dto';
+import { Person } from './domain/person';
 
 @Controller('person')
 export class PersonController {
@@ -14,7 +16,7 @@ export class PersonController {
     return this.personModel.find().exec();
   }
 
-  @Get(":id")
+  @Get("cos")
   @HttpCode(200)
   getById(@Param() params: {id: string}): Promise<PersonModel>  {
     return this.personModel.findById(params.id).exec();
@@ -26,11 +28,11 @@ export class PersonController {
     return this.personModel.findByIdAndRemove(params.id).exec();
   }
 
-  @Post(":id")
+  @Get(":id")
   @HttpCode(200)
-  UpdateById(@Param() params: {id: string}): Promise<PersonModel> {
-    const updatePerson = this.personModel.findByIdAndUpdate(params.id, {isTrustedByKarakan: true})
-    return  updatePerson.exec();
+  UpdateById(@Param() params: {id: string}, @Body() personUpdateDto: PersonUpdateDto) {
+    console.log(personUpdateDto);
+    return this.personModel.findByIdAndUpdate(params.id, personUpdateDto).exec();
   }
 
   @Post()
