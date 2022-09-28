@@ -2,7 +2,6 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
 import { PersonDto } from './domain/dto/person.dto';
-import { Person } from './domain/person';
 import { Person as PersonModel, PersonDocument } from './schema/person.schema';
 
 @Controller('person')
@@ -30,14 +29,8 @@ export class PersonController {
   @Post(":id")
   @HttpCode(200)
   UpdateById(@Param() params: {id: string}): Promise<PersonModel> {
-    return this.personModel.findById(params.id).update(
-      {
-        isTrustedByKarakan: false,
-      },
-      {
-        itTrusedByKarakan: true,
-      }
-      ).exec();
+    const updatePerson = this.personModel.findByIdAndUpdate(params.id, {isTrustedByKarakan: true})
+    return  updatePerson.exec();
   }
 
   @Post()
