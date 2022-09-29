@@ -1,10 +1,9 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Patch } from '@nestjs/common';
 import { PersonDto } from './domain/dto/person.dto';
 import { Person as PersonModel, PersonDocument } from './schema/person.schema';
 import { PersonUpdateDto } from './domain/dto/personUpdate.dto';
-import { Person } from './domain/person';
 
 @Controller('person')
 export class PersonController {
@@ -24,15 +23,14 @@ export class PersonController {
 
   @Delete(":id")
   @HttpCode(200)
-  DeleteById(@Param() params: {id: string}): Promise<PersonModel>  {
+  deleteById(@Param() params: {id: string}): Promise<PersonModel>  {
     return this.personModel.findByIdAndRemove(params.id).exec();
   }
 
-  @Get(":id")
+  @Patch(":id")
   @HttpCode(200)
-  UpdateById(@Param() params: {id: string}, @Body() personUpdateDto: PersonUpdateDto) {
-    console.log(personUpdateDto);
-    return this.personModel.findByIdAndUpdate(params.id, personUpdateDto).exec();
+  updateById(@Param() params: {id: string}, @Body() personUpdateDto: PersonUpdateDto) {
+    return this.personModel.findByIdAndUpdate(params.id, personUpdateDto, { new: true }).exec();
   }
 
   @Post()
